@@ -1,8 +1,10 @@
 import http from "http";
+import dotenv from "dotenv";
 import { handleRoutes } from "./router.js";
 import { initializeWebSocket } from "./ws/chatServer.js";
 
-const PORT = 3000;
+dotenv.config();
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
   console.log(`→ ${req.method} ${req.url}`);
