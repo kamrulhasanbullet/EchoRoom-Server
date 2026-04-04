@@ -53,3 +53,12 @@ export function getTokenFromCookie(req) {
 
   return cookies.token || null;
 }
+
+
+export function getTokenFromRequest(req) {
+  const authHeader = req.headers["authorization"];
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice(7);
+  }
+  return getTokenFromCookie(req);
+}

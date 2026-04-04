@@ -16,7 +16,7 @@ export async function register(req, res) {
 
     const existing = await users.findOne({ email });
     if (existing) {
-      res.writeHead(409);
+      res.writeHead(409, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "User already exists" }));
     }
 
@@ -37,7 +37,7 @@ export async function register(req, res) {
     res.end(JSON.stringify({ message: "User registered successfully" }));
   } catch (error) {
     console.error(error);
-    res.writeHead(500);
+    res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Internal server error" }));
   }
 }
@@ -47,7 +47,7 @@ export async function login(req, res) {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.writeHead(400);
+      res.writeHead(400, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "Email and password required" }));
     }
 
@@ -56,7 +56,7 @@ export async function login(req, res) {
 
     const user = await users.findOne({ email });
     if (!user) {
-      res.writeHead(401);
+      res.writeHead(401, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "Invalid credentials" }));
     }
 
@@ -66,7 +66,7 @@ export async function login(req, res) {
       .toString("hex");
 
     if (hash !== storedHash) {
-      res.writeHead(401);
+      res.writeHead(401, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "Invalid credentials" }));
     }
 
@@ -76,20 +76,17 @@ export async function login(req, res) {
       username: user.username,
     });
 
-    res.writeHead(200, {
-      "Set-Cookie": `token=${token}; HttpOnly; Path=/; Max-Age=7200; SameSite=Strict`,
-      "Content-Type": "application/json",
-    });
-
+    res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         message: "Login successful",
         username: user.username,
+        token: token,
       }),
     );
   } catch (error) {
     console.error(error);
-    res.writeHead(500);
+    res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Internal server error" }));
   }
 }

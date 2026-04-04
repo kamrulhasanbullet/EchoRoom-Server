@@ -9,11 +9,10 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
   console.log(`→ ${req.method} ${req.url}`);
 
-  // CORS for Live Server (Frontend)
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5501");
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Cookie");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") {
     res.writeHead(204);
@@ -23,7 +22,6 @@ const server = http.createServer((req, res) => {
   handleRoutes(req, res);
 });
 
-// WebSocket Initialize
 initializeWebSocket(server);
 
 server.listen(PORT, () => {
